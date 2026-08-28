@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO; // MIGRATED: New Input System namespace
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using UnityEngine.InputSystem; // MIGRATED: New Input System namespace
 
 public class MainManager : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class MainManager : MonoBehaviour
   public Rigidbody Ball;
 
   public Text ScoreText;
+  public Text HighScoreText;
   public GameObject GameOverText;
 
   private bool m_Started = false;
@@ -43,6 +45,8 @@ public class MainManager : MonoBehaviour
   // Start is called before the first frame update
   void Start()
   {
+    HighScoreText.text = $"Best Score by {DataManager.HighscorePlayerName} : {DataManager.HighscorePlayerScore}";
+
     const float step = 0.6f;
     int perLine = Mathf.FloorToInt(4.0f / step);
 
@@ -86,12 +90,23 @@ public class MainManager : MonoBehaviour
   void AddPoint(int point)
   {
     m_Points += point;
-    ScoreText.text = $"Score : {m_Points}";
+
+    ScoreText.text = $"{DataManager.CurrentPlayerName} : {m_Points}";
+
+    DataManager.CurrentPlayerScore = m_Points;
+
+    if (DataManager.HighscorePlayerScore < m_Points)
+    {
+      DataManager.HighscorePlayerName = DataManager.CurrentPlayerName;
+      DataManager.HighscorePlayerScore = m_Points;
+    }
   }
 
   public void GameOver()
   {
+    HighScoreText.text = $"Best Score by {DataManager.CurrentPlayerName} : {m_Points}";
     m_GameOver = true;
     GameOverText.SetActive(true);
   }
+
 }

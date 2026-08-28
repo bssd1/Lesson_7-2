@@ -8,21 +8,24 @@ using UnityEditor;
 public class MenuUIHandler : MonoBehaviour
 {
   [SerializeField] private TMP_InputField nameField;
+  [SerializeField] private GameObject highScoreText;
 
   private Color defaultColor;
 
   void Start()
   {
+    highScoreText.GetComponent<TextMeshProUGUI>().text = $"High Score: {DataManager.HighscorePlayerScore} by {DataManager.HighscorePlayerName}";
     defaultColor = nameField.image.color;
     nameField.onValueChanged.AddListener(_ => nameField.image.color = defaultColor);
   }
 
   public void StartNew()
   {
-    string playerName = nameField.text;
+    string playerName = nameField.text.Trim();
 
     if (!string.IsNullOrEmpty(playerName))
     {
+      DataManager.CurrentPlayerName = playerName;
       SceneManager.LoadScene(1);
     }
     else
