@@ -8,13 +8,14 @@ using UnityEditor;
 public class MenuUIHandler : MonoBehaviour
 {
   [SerializeField] private TMP_InputField nameField;
-  [SerializeField] private GameObject highScoreText;
+  [SerializeField] private TextMeshProUGUI highScoreText;
 
   private Color defaultColor;
 
   void Start()
   {
-    highScoreText.GetComponent<TextMeshProUGUI>().text = $"High Score: {DataManager.HighscorePlayerScore} by {DataManager.HighscorePlayerName}";
+    DataManager.Instance.LoadScore();
+    highScoreText.text = $"High Score: {DataManager.HighscorePlayerScore} by {DataManager.HighscorePlayerName}";
     defaultColor = nameField.image.color;
     nameField.onValueChanged.AddListener(_ => nameField.image.color = defaultColor);
   }

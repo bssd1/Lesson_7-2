@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.IO; // MIGRATED: New Input System namespace
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -45,7 +42,7 @@ public class MainManager : MonoBehaviour
   // Start is called before the first frame update
   void Start()
   {
-    HighScoreText.text = $"Best Score by {DataManager.HighscorePlayerName} : {DataManager.HighscorePlayerScore}";
+    DisplayHighscore();
 
     const float step = 0.6f;
     int perLine = Mathf.FloorToInt(4.0f / step);
@@ -95,7 +92,7 @@ public class MainManager : MonoBehaviour
 
     DataManager.CurrentPlayerScore = m_Points;
 
-    if (DataManager.HighscorePlayerScore < m_Points)
+    if (NewHighScore())
     {
       DataManager.HighscorePlayerName = DataManager.CurrentPlayerName;
       DataManager.HighscorePlayerScore = m_Points;
@@ -104,9 +101,27 @@ public class MainManager : MonoBehaviour
 
   public void GameOver()
   {
-    HighScoreText.text = $"Best Score by {DataManager.CurrentPlayerName} : {m_Points}";
+    DisplayHighscore();
+    DataManager.Instance.SaveScore();
+
     m_GameOver = true;
     GameOverText.SetActive(true);
+  }
+
+
+  private bool NewHighScore()
+  {
+    return DataManager.HighscorePlayerScore < m_Points;
+  }
+
+  private void DisplayHighscore()
+  {
+    HighScoreText.text = $"Best Score by {DataManager.HighscorePlayerName} : {DataManager.HighscorePlayerScore}";
+  }
+
+  public void BackToMenu()
+  {
+    SceneManager.LoadScene(0);
   }
 
 }

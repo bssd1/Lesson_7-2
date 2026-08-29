@@ -24,8 +24,8 @@ public class DataManager : MonoBehaviour
   public void SaveScore()
   {
     SaveData data = new SaveData();
-    data.Name = CurrentPlayerName;
-    data.Score = CurrentPlayerScore;
+    data.Name = HighscorePlayerName;
+    data.Score = HighscorePlayerScore;
 
     string json = JsonUtility.ToJson(data);
 
